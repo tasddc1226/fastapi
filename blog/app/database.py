@@ -1,4 +1,5 @@
 import pymysql
+
 pymysql.install_as_MySQLdb()
 
 from sqlalchemy import create_engine
@@ -13,7 +14,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 @as_declarative()
 class Base:
-
     @declared_attr
     def __tablename__(cls) -> str:
         return cls.__name__.lower()

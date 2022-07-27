@@ -7,6 +7,7 @@ from . import models
 
 models.Base.metadata.create_all(bind=engine)
 
+
 def get_application():
     _app = FastAPI(title=settings.PROJECT_NAME)
 
@@ -22,6 +23,7 @@ def get_application():
 
 
 app = get_application()
+
 
 @app.get("/")
 def index():
