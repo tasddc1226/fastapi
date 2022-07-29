@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
+from .routers import user
 from .database import engine
 from . import models
 
@@ -25,6 +26,4 @@ def get_application():
 app = get_application()
 
 
-@app.get("/")
-def index():
-    return {"message": "Hello, World!"}
+app.include_router(user.router)

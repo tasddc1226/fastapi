@@ -22,5 +22,5 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     email = Column(String(32), unique=True, nullable=False)
-    password = Column(String(16), nullable=False)
+    password = Column(String(64), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
