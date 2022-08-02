@@ -23,3 +23,12 @@ async def create_user(user: schemas.User, db: Session = Depends(Base.get_db)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Duplicate email")
 
     return new_user
+
+
+@router.get("/{id}", response_model=schemas.UserResponse)
+def get_user_by_id(id: int, db: Session = Depends(Base.get_db)):
+    """Get a user by id"""
+    user = db.query(models.User).filter(models.User.id == id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
