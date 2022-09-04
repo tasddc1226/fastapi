@@ -1,13 +1,9 @@
 import pytest
 from app import schemas
-from app.core.config import settings
-from fastapi.testclient import TestClient
-from app.main import app
-
-client = TestClient(app)
+from tests.test_config import client, session
 
 
-def test_새로운_유저_생성():
+def test_새로운_유저_생성(client):
     res = client.post("/users/", json={"email": "test@example.com", "password": "test"})
     new_user = schemas.UserResponse(**res.json())
 
