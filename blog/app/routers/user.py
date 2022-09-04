@@ -2,6 +2,8 @@ from fastapi import Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
+from typing import List
+
 from .. import models, schemas
 from ..database import Base
 from ..utils.password import hash_password
@@ -23,6 +25,13 @@ async def create_user(user: schemas.User, db: Session = Depends(Base.get_db)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Duplicate email")
 
     return new_user
+
+
+@router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.UserResponse])
+def get_all_users(db: Session = Depends(Base.get_db)):
+    """Get all the users"""
+    users = db.query(models.User).all()
+    return users
 
 
 @router.get("/{id}", response_model=schemas.UserResponse)
