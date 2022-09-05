@@ -4,11 +4,16 @@ from sqlalchemy.exc import IntegrityError
 
 from typing import List
 
-from .. import models, schemas
+from .. import models, schemas, oauth2
 from ..database import Base
 from ..utils.password import hash_password
 
 router = APIRouter(prefix="/users", tags=["User"])
+
+
+@router.get("/create", status_code=status.HTTP_201_CREATED)
+def create_test(current_user: int = Depends(oauth2.get_current_user)):
+    print(current_user.id)
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserResponse)
@@ -49,7 +54,8 @@ def delete_user_by_id(id: int, db: Session = Depends(Base.get_db)):
     user = db.query(models.User).filter(models.User.id == id)
     if user.first() == None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id: {id} does not exist!"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id: {id} does not exist!",
         )
 
     try:
