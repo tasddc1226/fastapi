@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from .routers import user
+from .routers import user, auth
 from .database import engine
 from . import models
 
@@ -27,3 +27,4 @@ app = get_application()
 
 
 app.include_router(user.router)
+app.include_router(auth.router)
