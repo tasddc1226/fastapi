@@ -1,3 +1,4 @@
+from app import user_repository
 from fastapi import APIRouter, Depends, status, HTTPException, Response
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -11,7 +12,7 @@ router = APIRouter(tags=["Auth"])
 
 @router.post("/login", response_model=schemas.Token)
 def login(login: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(Base.get_db)):
-    user = db.query(models.User).filter(models.User.email == login.username).first()
+    user = user_repository.get_user_by_email(db, login.username)
     if not user:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="E-mail does not exist")
 
