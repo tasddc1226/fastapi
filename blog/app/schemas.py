@@ -26,3 +26,40 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[str] = None
+
+
+class Login(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class PostBase(BaseModel):
+    title: str
+    body: str
+
+
+class Post(PostBase):
+    id: int
+    user_id: int
+    created_at: datetime
+    user: UserResponse
+
+    class Config:
+        orm_mode = True
+
+
+class CreatePost(PostBase):
+    pass
+
+
+class PostLike(BaseModel):
+    Post: Post
+    likes: int
+
+    class Config:
+        orm_mode = True
+
+
+class Like(BaseModel):
+    post_id: int
+    dir: conint(le=1)
