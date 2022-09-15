@@ -19,7 +19,7 @@ def test_이미_존재하는_유저_생성(client, test_user):
     res = client.post("/users/", json=user_data)
 
     assert res.status_code == 400
-    assert res.json()["detail"] == "Duplicate email"
+    assert res.json()["detail"] == "User already exists."
 
 
 def test_존재하는_유저_조회(client, test_user):
@@ -42,7 +42,7 @@ def test_존재하는_유저_삭제(client, test_user):
     id = test_user["id"]
     res = client.delete(f"/users/{id}")
 
-    assert res.status_code == 204
+    assert res.status_code == 200
 
 
 def test_존재하지_않는_유저_삭제(client):
