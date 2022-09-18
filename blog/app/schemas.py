@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from pydantic.types import conint
 
-from typing import Optional
+from typing import Optional, Type
 from datetime import datetime
 
 
@@ -62,4 +62,4 @@ class PostLike(BaseModel):
 
 class Like(BaseModel):
     post_id: int
-    dir: conint(le=1)
+    dir: int = conint(le=1)
