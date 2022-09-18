@@ -34,7 +34,7 @@ def get_posts(
 def create_post(
     post: schemas.CreatePost,
     db: Session = Depends(Base.get_db),
-    current_user: int = Depends(oauth2.get_current_user),
+    current_user: schemas.User = Depends(oauth2.get_current_user),
 ):
     """Create a new post"""
     new_post = models.Post(user_id=current_user.id, **post.dict())
