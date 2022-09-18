@@ -9,11 +9,6 @@ from ..database import Base
 router = APIRouter(prefix="/users", tags=["User"])
 
 
-@router.get("/create", status_code=status.HTTP_201_CREATED)
-def create_test(current_user: int = Depends(oauth2.get_current_user)):
-    print(current_user.id)
-
-
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserResponse)
 def create_user(user: schemas.User, db: Session = Depends(Base.get_db)):
     """Create a new user"""
