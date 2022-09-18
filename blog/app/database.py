@@ -16,9 +16,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 class Base:
     @declared_attr
     def __tablename__(cls) -> str:
-        return cls.__name__.lower()
+        return cls.__tablename__.lower()
 
-    def get_db():
+    @classmethod
+    def get_db(cls):
         db = SessionLocal()
         try:
             yield db
