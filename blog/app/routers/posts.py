@@ -1,6 +1,11 @@
-from fastapi import Response, status, HTTPException, Depends, APIRouter
+from datetime import datetime
+import secrets
+from fastapi import Response, status, HTTPException, Depends, APIRouter, UploadFile, File
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+import os
+from fastapi.responses import FileResponse
+
 
 from typing import Optional, List
 
@@ -42,3 +47,29 @@ def create_post(
     db.commit()
     db.refresh(new_post)
     return new_post
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_DIR = os.path.join(BASE_DIR, "static/")
+IMG_DIR = os.path.join(STATIC_DIR, "images/")
+SERVER_IMG_DIR = os.path.join("http://localhost:8000/", "static/", "images/")
+
+
+@router.post("/upload-images", status_code=status.HTTP_201_CREATED)
+async def upload_image(in_files: List[UploadFile] = File(...)):
+    file_urls = []
+    for file in in_files:
+        now = datetime.now().strftime("%Y%m%d%H%M%S")
+        file_name = "".join([now, secrets.token_hex(16)])
+
+        file_location = os.path.join(IMG_DIR, file_name)
+        with open(file_location, "wb+") as file_object:
+            file_object.write(file.file.read())
+        file_urls.append(SERVER_IMG_DIR + file_name)
+    result = {"file_urls": file_urls}
+    return result
+
+
+@router.get("/images/{file_name}", status_code=status.HTTP_200_OK)
+def get_image(file_name: str):
+    return FileResponse("".join([IMG_DIR, file_name]))
